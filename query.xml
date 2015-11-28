@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <query>
   <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
-  <rowMod type = "exclude">2</rowMod>
+  <rowMod type = "exclude">1,2</rowMod>
   <colFilters>
-    <filter type = "exclude" col = "measurement_method">PCR,RNA_seq</filter>
+    <filter type = "include" col = "measured_material">whole_head</filter>
   </colFilters>
 </query>
