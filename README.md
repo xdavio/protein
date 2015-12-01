@@ -33,7 +33,7 @@ Here is an example func.py file:
 from pairdiff.main import getPairDiff, pairdiff, getPairDiffdebug
 
 diff = getPairDiff(
-    filepath = 'DmelClockTimeSeriesSearch-2015-03-26--DataTable3.csv',
+    filepath = 'data.xlsx',
     querypath = 'query.xml',
     numberrange = 0,
     dayrange = 0,
@@ -42,3 +42,14 @@ diff = getPairDiff(
     excel = 0
     )
 ```
+
+The following describes the meaning of the parameters:
+* filepath: Specifies the relative path of the spreadsheet of interest.
+* querypath: Specifies the relative path of the query of interest on the spreadsheet.
+* numberrange: Specifies how to handle cells of the form "NUM to NUM":
+  * 0 means average the range of numbers,
+  * 1 means take the first number,
+  * 2 means take the second number,
+  * 3 means take the smaller number
+  * 4 means take the larger number
+* dayrange: Specifies how to handle multiple days. If -1, leave all days in the dataset as separate data points. If 0, average over the days and proceed. Other options are available in the process.py file for the interested reader.
