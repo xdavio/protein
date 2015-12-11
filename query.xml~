@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<query>
-  <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
-  <rowMod type = "exclude">1,4,6,9</rowMod>
-  <colFilters>
-    <filter type = "include" col = "measurement_method">PCR</filter>
-  </colFilters>
-</query>
