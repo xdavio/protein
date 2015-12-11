@@ -11,7 +11,7 @@ You need the following packages to run this script:
 * Pandas
 * xlrd
 
-Use standard python package installation tools such as pip or easy_install in order to obtain these packages. Error will result otherwise, identifying the name of the missing package(s).
+Use standard python package installation tools such as pip or easy_install in order to obtain these packages. Error will result otherwise, identifying the name of the missing package(s). Ask me for help installing python modules/packages if you want a tutorial.
 
 ## Directory Structure
 
@@ -53,3 +53,15 @@ The following describes the meaning of the parameters:
   * 3 means take the smaller number
   * 4 means take the larger number
 * dayrange: Specifies how to handle multiple days. If -1, leave all days in the dataset as separate data points. If 0, average over the days and proceed. Other options are available in the process.py file for the interested reader.
+* firstcol: Specifies the column number before the first column of data. In most spreadsheets, the first column is "day" which isn't actually "time to peak" (or similar) data. Usually, this value is 1.
+* lastcol: Specifies the column number before the last column of data (e.g. the column number of the last column of data minus 1). If your output doesn't contain all of the data columns of interest, try increasing this number by 1. If the script fails, try decreasing this number by 1. 
+* excel: This selects the spreadsheet in the xlsx file described by "filepath." It is "0-indexed" which means 0 is the first spreadsheet, 1 is the second spreadsheet, and so on. 
+
+
+To run the script, open terminal. Then use the 
+```shell
+cd path/to/yourproject
+```
+
+
+Alternatively, you can run the script with
