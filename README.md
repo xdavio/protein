@@ -27,6 +27,8 @@ When you download this code, I recommend copying the sample func.py and query.xm
 
 ## Running the script
 
+### func.py
+
 Here is an example func.py file:
 
 ```python
@@ -57,11 +59,56 @@ The following describes the meaning of the parameters:
 * lastcol: Specifies the column number before the last column of data (e.g. the column number of the last column of data minus 1). If your output doesn't contain all of the data columns of interest, try increasing this number by 1. If the script fails, try decreasing this number by 1. 
 * excel: This selects the spreadsheet in the xlsx file described by "filepath." It is "0-indexed" which means 0 is the first spreadsheet, 1 is the second spreadsheet, and so on. 
 
+### query.xml
 
-To run the script, open terminal. Then use the 
-```shell
-cd path/to/yourproject
+Here is an example of a query.xml file:
+```xml
+<?xml version="1.0"?>
+<query>
+  <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
+  <rowMod type = "exclude">1,2</rowMod>
+  <colFilters>
+    <filter type = "include" col = "measured_material">whole_head</filter>
+  </colFilters>
+</query>
 ```
 
+Each such query.xml file can only have one query in it. If you wish to enumerate with commas rows of the spreadsheet to exclude, modify the "rowMod" line. If you wish to specify the rows to include instead of the ones to remove, change "exclude" to "include." The same logic applies to each subsequent place in the file where you see "include" and "exclude."
 
-Alternatively, you can run the script with
+Each row of the form
+```xml
+    <filter type = "include" col = "measured_material">whole_head</filter>
+```
+can be used specify your query. The variable "col" (which here has the value "measured\_material") selects the column you wish to restrict the pairwise difference algorithm on. It must match exactly the column name in the xlsx file. Where "whole\_head" is written, write whichever factors you're interested in selecting. If there is more than one, separate them with commas. So you may instead write "whole\_head,northern\_blot" which would include all rows with either of these tags under the "measured\_material" column and throw out the rest. If you wanted to keep the rest, change "incldue" to "exclude". If you want to extend your query to other columns in the spreadsheet, simply duplicate the filter row:
+```xml
+  <colFilters>
+    <filter type = "include" col = "measured_material">whole_head</filter>
+    <filter type = "exclude" col = "another_column">something,something_else</filter>
+  </colFilters>
+```
+You can perform this row duplication an arbitrary number of times. Make sure you save the query.xml file when you're done modifying it.
+
+### Actually running the script
+
+To run the script, open terminal. Then write in the terminal window
+```shell
+cd path/to/yourproject
+python
+```
+
+The terminal window will turn into a python interpreter. You can then copy-paste the contents of func.py into the interpreter and press enter. The pairwise differences should appear on the screen after writing "diff" and pressing enter. This is the same diff as the 3rd line of func.py above. If it were instead 
+```python
+diff3 = getPairDiff(...)
+```
+then writing "diff3" and pressing enter would display the pairwise differences.
+
+
+### Debugging
+
+You may wish to see how the filters you're specifying are affecting the spreadsheet. To do this, use "getPairDiffdebug" instead of "getPairDiff" in line 3 of func.py. This will create a directory with the same name as the xlsx file in the filepath variable. Inside the directory will be several spreadsheets including one for the pairwise differences. They are described here:
+
+* data.csv: This is just the imported spreadsheet.
+* datarange.csv: This is after cells with 'NUM to NUM' are fixed.
+* datadays.csv: This is after multiple days are handled.
+* dataquery.csv: This is after the query.xml file is applied.
+* pairdiff.csv: This is the pairwise difference measure.
