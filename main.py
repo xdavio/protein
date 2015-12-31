@@ -23,6 +23,7 @@ class pairDiff(object):
         dayrange,
         firstcol,
         lastcol,
+        excel,
         local_hijack
         ):
     
@@ -32,7 +33,7 @@ class pairDiff(object):
         if filetype == "csv":
             data = pd.DataFrame.from_csv(filepath)
         elif filetype == "xlsx" or filetype == "xls":
-            data = pd.read_excel(filepath, sheetname = 0, index_col = 0) #right now just reads first sheet
+            data = pd.read_excel(filepath, sheetname = excel, index_col = 0) #reads the sheet indexed by "excel" - it's python indexed.
         if local_hijack:
             self.data = copy(data)
 
@@ -95,7 +96,8 @@ def getPairDiff(
         numberrange = 0,
         dayrange = 0,
         firstcol = 1,
-        lastcol = 10
+        lastcol = 10,
+        excel = 0
         ):
 
     foo = pairDiff()
@@ -107,6 +109,7 @@ def getPairDiff(
             dayrange,
             firstcol,
             lastcol,
+            excel,
             local_hijack = False
             )
         )
@@ -117,7 +120,8 @@ def getPairDiffdebug(
         numberrange = 0,
         dayrange = 0,
         firstcol = 1,
-        lastcol = 10
+        lastcol = 10,
+        excel = 0
         ):
     foo = pairDiff()
     foo.getPairDiff(
@@ -127,6 +131,7 @@ def getPairDiffdebug(
         dayrange,
         firstcol,
         lastcol,
+        excel,
         local_hijack = True
         )
     return(foo)
@@ -137,6 +142,7 @@ if __name__ == "__main__":
     querypath = 'pairdiff/query.xml'
     numberrange = 0
     dayrange = 0
+    excel = 0
     firstcol = 1 #python indexed
     lastcol = 10 #python indexed
 
