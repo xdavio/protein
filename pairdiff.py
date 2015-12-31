@@ -13,7 +13,12 @@ def pairdiff(mat):
     def vectorOperator(vec):
         """takes the outer product of a vector"""
         def foo(a,b):
-            return(np.absolute(a-b, dtype = np.float))
+            x1 = np.min([a,b])
+            x2 = np.max([a,b])
+            out1 = x2 - x1
+            out2 = x1 - x2 + 24
+            #return(np.absolute(a-b, dtype = np.float))
+            return(np.min([out1,out2]))
 
         out = np.array(list(starmap(foo,combinations(vec,2))), dtype = np.float)
         out = out[~np.isnan(out)]
