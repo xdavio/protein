@@ -6,6 +6,7 @@ from filter import filterobj, createQuery
 from copy import copy
 import os.path
 from os import makedirs
+import xlsxwriter
 
 class pairDiff(object): 
     def __init__(self):
@@ -74,20 +75,27 @@ class pairDiff(object):
         return(diffmeas)
 
     def debugger(self,filepath):
+        """
+        Writes XLSX files for each step of the data filter process
+        """
         directory = os.path.basename(filepath).split(".")[0]
         if not os.path.exists(directory):
             makedirs(directory)
 
-        #output everything
-        #####PROBLEM THESE OUTPUT CSVS DON'T HANDLE MULTIPLE FACTORS!!
-        def filecsv(foo):
-            filepath = directory + "/" + foo + ".csv"
+        def filexlsx(foo):
+            """
+            Creates xlsx filepath/name
+            """
+            filepath = directory + "/" + foo + ".xlsx"
             return(filepath)
-        self.data.to_csv(filecsv('data'))
-        self.datarange.to_csv(filecsv('datarange'))
-        self.datadays.to_csv(filecsv('datadays'))
-        self.dataquery.to_csv(filecsv('dataquery'))
-        self.pairdiff.to_csv(filecsv('pairdiff'))
+
+        writer = pd.ExcelWriter(filexlsx('debug'), engine='xlsxwriter')
+        self.data.to_excel(writer, sheet_name = 'data')
+        self.datarange.to_excel(writer, sheet_name = 'datarange')
+        self.datadays.to_excel(writer, sheet_name = 'datadays')
+        self.dataquery.to_excel(writer, sheet_name = 'dataquery')
+        self.pairdiff.to_excel(writer, sheet_name = 'pairdiff')
+        writer.save()
 
 
 def getPairDiff(
