@@ -21,7 +21,12 @@ class filterobj():
         self.tmp = [False] * self.m
         for value in argl:
             #self.l = list(self.data[col] == value)
-            self.l = list([value in x for x in self.data[col]])
+            try:
+                #print [x for x in self.data[col]]
+                self.l = list([value in x for x in self.data[col]])
+            except:
+                #sometimes this string comparison is needed
+                self.l = list([str(value) in str(x) for x in self.data[col]])
             self.tmp = [max(a,b) for a,b in izip(self.l,self.tmp)]
         if not inclusion:
             self.tmp = [not x for x in self.tmp]
@@ -53,16 +58,24 @@ def createQuery(xmlfile, m, dataproc):
     xmldoc = minidom.parse(xmlfile) #only user input is here
     rawexclusion = xmldoc.getElementsByTagName('rowMod')
     rawType = str(rawexclusion[0].attributes['type'].value)
-    rawValue = [int(x) for x in (rawexclusion[0].firstChild.nodeValue).split(',')]
+    try:
+        rawValue = [int(x) for x in (rawexclusion[0].firstChild.nodeValue).split(',')]
+    except:
+        print "No rows excluded or included explicitly."
+        rawValue = []
     filters = xmldoc.getElementsByTagName('filter')
 
     #build query object
     query = filterobj(m,dataproc)
-    if rawType == 'include':
-        query.rawinclude(rawValue, inclusion = True)
-    else:
-        query.rawinclude(rawValue, inclusion = False)
+    
+    #make sure there are row exclusions
+    if rawValue:        
+        if rawType == 'include':
+            query.rawinclude(rawValue, inclusion = True)
+        else:
+            query.rawinclude(rawValue, inclusion = False)
 
+    #make sure there are filters
     for filt in filters:
         incl = str(filt.attributes['type'].value)
         col = str(filt.attributes['col'].value)
@@ -105,11 +118,12 @@ if __name__ == "__main__":
     else:
         query.rawinclude(rawValue, inclusion = False)
 
-    for filt in filters:
-        incl = str(filt.attributes['type'].value)
-        col = str(filt.attributes['col'].value)
-        values = [str(x) for x in filt.firstChild.nodeValue.split(',')]
-        if incl == "include":
-            query.includeColFactors(col, values, True)
-        else:
-            query.excludeColFactors(col, values, False)
+    if filters:
+        for filt in filters:
+            incl = str(filt.attributes['type'].value)
+            col = str(filt.attributes['col'].value)
+            values = [str(x) for x in filt.firstChild.nodeValue.split(',')]
+            if incl == "include":
+                query.includeColFactors(col, values, True)
+            else:
+                query.excludeColFactors(col, values, False)
