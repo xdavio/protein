@@ -57,36 +57,41 @@ class filterobj():
         self.include = [x and y for x,y in izip(self.include,add)]
         
 def createQuery(xmlfile, m, dataproc):
-    #xml processing
-    xmldoc = minidom.parse(xmlfile) #only user input is here
-    rawexclusion = xmldoc.getElementsByTagName('rowMod')
-    rawType = str(rawexclusion[0].attributes['type'].value)
-    try:
-        rawValue = [int(x) for x in (rawexclusion[0].firstChild.nodeValue).split(',')]
-    except:
-        print "No rows excluded or included explicitly."
-        rawValue = []
-    filters = xmldoc.getElementsByTagName('filter')
+    """
+    Reads XML file and wraps the filterobj class above.
+    """
 
     #build query object
     query = filterobj(m,dataproc)
-    
-    #make sure there are row exclusions
-    if rawValue:        
+
+    #xml processing
+    xmldoc = minidom.parse(xmlfile) #only user input is here
+
+    #raw row exlusion / inclusion
+    try:
+        rawexclusion = xmldoc.getElementsByTagName('rowMod')
+        rawType = str(rawexclusion[0].attributes['type'].value)
+        rawValue = [int(x) for x in (rawexclusion[0].firstChild.nodeValue).split(',')]
         if rawType == 'include':
             query.rawinclude(rawValue, inclusion = True)
         else:
             query.rawinclude(rawValue, inclusion = False)
+    except:
+        print "No rows excluded or included explicitly."
 
-    #make sure there are filters
-    for filt in filters:
-        incl = str(filt.attributes['type'].value)
-        col = str(filt.attributes['col'].value)
-        values = [str(x) for x in filt.firstChild.nodeValue.split(',')]
-        if incl == "include":
-            query.includeColFactors(col, values, True)
-        else:
-            query.includeColFactors(col, values, False)
+    #column filters
+    filters = xmldoc.getElementsByTagName('filter')
+    if filters:
+        for filt in filters:
+            incl = str(filt.attributes['type'].value)
+            col = str(filt.attributes['col'].value)
+            values = [str(x) for x in filt.firstChild.nodeValue.split(',')]
+            if incl == "include":
+                query.includeColFactors(col, values, True)
+            else:
+                query.includeColFactors(col, values, False)
+    else:
+        print "No filters specified in xml query."
 
     return(query.include)
 
