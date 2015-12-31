@@ -47,12 +47,15 @@ class filterobj():
         """
         Worker function that updates global inclusion boolean vector
         """
-        for i in range(self.m):
-            if self.include[i] and add[i]:
-                self.include[i] = True
-            else:
-                self.include[i] = False
+        ## for i in range(self.m):
+        ##     if self.include[i] and add[i]:
+        ##         self.include[i] = True
+        ##     else:
+        ##         self.include[i] = False
 
+        #consider this alternative syntactic sugar
+        self.include = [x and y for x,y in izip(self.include,add)]
+        
 def createQuery(xmlfile, m, dataproc):
     #xml processing
     xmldoc = minidom.parse(xmlfile) #only user input is here
