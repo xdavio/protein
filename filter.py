@@ -1,10 +1,11 @@
 from xml.dom import minidom
 from itertools import izip
 
-#main code for subsetting the dataset
 class filterobj():
-    """This object converts the xml file in the createQuery into a boolean vector
-    of row inclusion."""
+    """
+    This object converts the xml file in the createQuery into a boolean vector
+    of row inclusion.
+    """
     def __init__(self, m, data):
         self.m = m
         self.include = [True] * self.m
@@ -13,28 +14,32 @@ class filterobj():
             
     def includeColFactors(self, col, argl, inclusion = True):
         """
-        Here, col is the string of the column name of interest,
+        col is the string of the column name of interest,
         argl is a list of strings of factors of interest.
-        inclusion determines of the factors of interest are included or excluded
+        inclusion determines if the factors of interest are included or excluded
         from final row inclusion.
         """
         self.tmp = [False] * self.m
         for value in argl:
-            #self.l = list(self.data[col] == value)
             try:
-                #print [x for x in self.data[col]]
                 self.l = list([value in x for x in self.data[col]])
             except:
                 #sometimes this string comparison is needed
                 self.l = list([str(value) in str(x) for x in self.data[col]])
             self.tmp = [max(a,b) for a,b in izip(self.l,self.tmp)]
+
+        #flip for exclusion
         if not inclusion:
             self.tmp = [not x for x in self.tmp]
+
+        #add this column
         self.add_to_list(self.tmp)
 
     def rawinclude(self, l, inclusion = True):
-        """This method deals with user-defined inclusion / exclusion of rows based on row number.
-        Here, the user-supplied rows are NOT python-indexed, that is, they start with 1 and not 0."""
+        """
+        This method deals with user-defined inclusion / exclusion of rows based on row number.
+        Here, the user-supplied rows are NOT python-indexed, that is, they start with 1 and not 0.
+        """
         #l is list of inclusion indices plus 1
         self.tmp = [False] * self.m
         for i in l:
@@ -47,13 +52,6 @@ class filterobj():
         """
         Worker function that updates global inclusion boolean vector
         """
-        ## for i in range(self.m):
-        ##     if self.include[i] and add[i]:
-        ##         self.include[i] = True
-        ##     else:
-        ##         self.include[i] = False
-
-        #consider this alternative syntactic sugar
         self.include = [x and y for x,y in izip(self.include,add)]
         
 def createQuery(xmlfile, m, dataproc):
@@ -61,11 +59,8 @@ def createQuery(xmlfile, m, dataproc):
     Reads XML file and wraps the filterobj class above.
     """
 
-    #build query object
-    query = filterobj(m,dataproc)
-
-    #xml processing
-    xmldoc = minidom.parse(xmlfile) #only user input is here
+    query = filterobj(m,dataproc) #build query object
+    xmldoc = minidom.parse(xmlfile) #xml processing only user input is here
 
     #raw row exlusion / inclusion
     try:
