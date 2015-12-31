@@ -105,10 +105,10 @@ then writing "diff3" and pressing enter would display the pairwise differences.
 
 ### Debugging
 
-You may wish to see how the filters you're specifying are affecting the spreadsheet. To do this, use "getPairDiffdebug" instead of "getPairDiff" in line 3 of func.py. This will create a directory with the same name as the xlsx file in the filepath variable. Inside the directory will be several spreadsheets including one for the pairwise differences. They are described here:
+You may wish to see how the filters you're specifying are affecting the spreadsheet. To do this, use "getPairDiffdebug" instead of "getPairDiff" in line 3 of func.py. This will create a directory with the same name as the xlsx file in the filepath variable. Inside the directory will a single xlsx file called "debug.xlsx" with several sheets. The sheets are named and described here:
 
-* data.csv: This is just the imported spreadsheet.
-* datarange.csv: This is after cells with 'NUM to NUM' are fixed.
-* datadays.csv: This is after multiple days are handled.
-* dataquery.csv: This is after the query.xml file is applied.
-* pairdiff.csv: This is the pairwise difference measure.
+* data: This is just the imported spreadsheet.
+* datarange: This is after cells with 'NUM to NUM' are fixed.
+* datadays: This is after multiple days are handled.
+* dataquery: This is after the query.xml file is applied.
+* pairdiff: This is the pairwise difference measure.
