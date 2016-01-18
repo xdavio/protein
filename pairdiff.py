@@ -2,6 +2,17 @@ import numpy as np
 import pandas as pd
 from itertools import starmap, combinations
 
+def foo(a,b):
+    """
+    Currently the workhorse function for calculating the day-shifted pairwise difference
+    """
+    x1 = np.min([a,b])
+    x2 = np.max([a,b])
+    out1 = x2 - x1
+    out2 = x1 - x2 + 24
+    #return(np.absolute(a-b, dtype = np.float))
+    return(np.min([out1,out2]))
+
 def pairdiff(mat):
     """
     takes an m x n matrix, walks over the columns, and places a
@@ -12,20 +23,14 @@ def pairdiff(mat):
     """
     def vectorOperator(vec):
         """takes the outer product of a vector"""
-        def foo(a,b):
-            x1 = np.min([a,b])
-            x2 = np.max([a,b])
-            out1 = x2 - x1
-            out2 = x1 - x2 + 24
-            #return(np.absolute(a-b, dtype = np.float))
-            return(np.min([out1,out2]))
-
         out = np.array(list(starmap(foo,combinations(vec,2))), dtype = np.float)
         out = out[~np.isnan(out)]
         n = len(out)
         return(np.sum(out,dtype=float)/n)
 
     return(np.apply_along_axis(vectorOperator, 0, mat))
+    #return(np.apply_along_axis(vectorOperator, 0, np.array(mat).T))
+    
 
 
 

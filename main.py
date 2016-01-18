@@ -7,6 +7,8 @@ from copy import copy
 import os.path
 from os import makedirs
 import xlsxwriter
+from blockaverage import get_diffs
+import json
 
 class pairDiff(object): 
     def __init__(self):
@@ -56,7 +58,10 @@ class pairDiff(object):
             self.datadays = dataproc
 
         #create difference     take dataproc
-        diff = pairdiff(dataproc.iloc[:,range(firstcol,lastcol + 1)])
+        datamat = dataproc.iloc[:,range(firstcol,lastcol + 1)]
+        if local_hijack:
+            self.datamat = datamat
+        diff = pairdiff(datamat)
         diffmeas = pd.DataFrame(data = diff,
                                 index = dataproc.columns[firstcol:lastcol+1],
                                 columns = ["diff"])
@@ -89,6 +94,14 @@ class pairDiff(object):
             filepath = directory + "/" + foo + ".xlsx"
             return(filepath)
 
+        def filejson(foo):
+            """
+            Creates xlsx filepath/name
+            """
+            filepath = directory + "/" + foo + ".json"
+            return(filepath)
+
+
         writer = pd.ExcelWriter(filexlsx('debug'), engine='xlsxwriter')
         self.data.to_excel(writer, sheet_name = 'data')
         self.datarange.to_excel(writer, sheet_name = 'datarange')
@@ -96,6 +109,10 @@ class pairDiff(object):
         self.dataquery.to_excel(writer, sheet_name = 'dataquery')
         self.pairdiff.to_excel(writer, sheet_name = 'pairdiff')
         writer.save()
+
+        with(open(filejson('pairs'), 'w')) as f:
+            f.write(json.dumps(get_diffs(self.datamat)))
+        
 
 
 def getPairDiff(
