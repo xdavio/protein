@@ -1,5 +1,8 @@
 from xml.dom import minidom
 from itertools import izip
+import re
+
+pattern = '^\d*' #only used in regex search of index
 
 class filterobj():
     """
@@ -73,6 +76,25 @@ def createQuery(xmlfile, m, dataproc):
             query.rawinclude(rawValue, inclusion = False)
     except:
         print "No rows excluded or included explicitly."
+
+    #index filters
+    try:
+        papers_ind = [int(re.findall(pattern, x)[0]) for x in dataproc.index]
+        papers = xmldoc.getElementsByTagName('papers')[0]
+        papers_incl = str(papers.attributes['type'].value)
+        papers_values = [int(x) for x in papers.firstChild.nodeValue.split(',')] #from xml
+        if papers_incl == 'include':
+            foohook = True
+        else:
+            foohook = False
+        for value in papers_values:
+            query.rawinclude(
+                [i+1 for i,x in enumerate(papers_ind) if value == x],
+                inclusion = foohook
+                )
+    except:
+        print "No papers explicitly included or excluded."
+        
 
     #column filters
     filters = xmldoc.getElementsByTagName('filter')
