@@ -4,6 +4,19 @@ import re
 
 pattern = '^\d*' #only used in regex search of index
 
+def reg_search(query_value, excel_value):
+    """
+    worker function that REGEX whether query_value is in excel_value
+    """
+    
+    pattern = r"(?<!-)\b" + str(query_value) + r"\b(?!-)"
+    m = re.search(pattern, str(excel_value))
+    if m:
+        return True
+    else:
+        return False
+    
+
 class filterobj():
     """
     This object converts the xml file in the createQuery into a boolean vector
@@ -24,11 +37,14 @@ class filterobj():
         """
         self.tmp = [False] * self.m
         for value in argl:
-            try:
-                self.l = list([value in x for x in self.data[col]])
-            except:
-                #sometimes this string comparison is needed
-                self.l = list([str(value) in str(x) for x in self.data[col]])
+            self.l = [reg_search(value, x) for x in self.data[col]]
+            ## try:
+            ##     self.l = list([value in x for x in self.data[col]])
+            ## except:
+            ##     #sometimes this string comparison is needed
+            ##     self.l = list([str(value) in str(x) for x in self.data[col]])
+            
+            
             self.tmp = [max(a,b) for a,b in izip(self.l,self.tmp)]
 
         #flip for exclusion
@@ -152,3 +168,30 @@ if __name__ == "__main__":
                 query.includeColFactors(col, values, True)
             else:
                 query.excludeColFactors(col, values, False)
+
+
+    cases = ['anti-per',
+     'asdf-anti-per',
+     'anti-per-asdf',
+     'anti-per,dog',
+     'cat,anti-per',
+     'cat,anti-per,dog',
+     'anti-per, dog',
+     'cat, anti-per',
+     'cat, anti-per, dog',
+     'blah-anti-per,dog',
+     'cat,blah-anti-per',
+     'cat,lah-anti-per,dog',
+     'blah-anti-per, dog',
+     'cat, blah-anti-per',
+     'cat, asdanti-per, dog']
+
+    a = 'anti-per'
+    factorpattern = r"(?<!-)\b" + a + r"\b(?!-)"
+    
+
+    for string in cases:
+        if re.search(factorpattern, string):
+            print True
+        else:
+            print False
