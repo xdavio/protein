@@ -67,6 +67,7 @@ Here is an example of a query.xml file:
 <query>
   <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
   <rowMod type = "exclude">1,2</rowMod>
+  <papers type = "include">15,71</papers>
   <colFilters>
     <filter type = "include" col = "measured_material">whole_head</filter>
   </colFilters>
