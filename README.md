@@ -9,6 +9,7 @@ This document outlines the usage of the pairwise difference measure of internal 
 You need the following packages to run this script:
 * Numpy
 * Pandas
+* xlsxwriter
 * xlrd
 
 Use standard python package installation tools such as pip or easy_install in order to obtain these packages. Error will result otherwise, identifying the name of the missing package(s). Ask me for help installing python modules/packages if you want a tutorial.
