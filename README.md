@@ -9,6 +9,7 @@ This document outlines the usage of the pairwise difference measure of internal 
 You need the following packages to run this script:
 * Numpy
 * Pandas
+* xlsxwriter
 * xlrd
 
 Use standard python package installation tools such as pip or easy_install in order to obtain these packages. Error will result otherwise, identifying the name of the missing package(s). Ask me for help installing python modules/packages if you want a tutorial.
@@ -67,6 +68,7 @@ Here is an example of a query.xml file:
 <query>
   <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
   <rowMod type = "exclude">1,2</rowMod>
+  <papers type = "include">15,71</papers>
   <colFilters>
     <filter type = "include" col = "measured_material">whole_head</filter>
   </colFilters>
