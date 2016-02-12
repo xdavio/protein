@@ -12,6 +12,23 @@ df = read.xls('debug.xlsx', sheet = 'datadays', header = T)
 ######examples for bret
 features = names(pairs) #vec of feature names
 
+
+##anova
+####remember get(i)
+l = list()
+for (i in features) {
+    print('--------')
+    print(i)
+    #l[[i]] = lm(get(i) ~ measurement_method, data = df)
+    l[[i]] = anova(lm(get(i) ~ measurement_method, data = df))
+    print(l[[i]])
+}
+
+
+#str(l[[1]])
+#print(anova(lm(peak_to_dusk_x_hrs ~ measurement_method, data = df)))
+
+
 #####################
 #get summaries of features
 summ <- function(name) {
