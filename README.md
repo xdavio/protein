@@ -19,10 +19,10 @@ Use standard python package installation tools such as pip or easy_install in or
 The directory structure of the end-user should look like the following:
 
 yourproject/
-  -/func.py   (tells python which data and query files to grab, and other parameters)
-  -/query.xml (specifies the SQL-like query on the data)
-  -/data.xlsx (the Excel file of time series information)
-  -/pairdiff/[contents of this repository go here]
+  * /func.py   (tells python which data and query files to grab, and other parameters)
+  * /query.xml (specifies the SQL-like query on the data)
+  * /data.xlsx (the Excel file of time series information)
+  * /pairdiff/[contents of this repository go here]
 
 When you download this code, I recommend copying the sample func.py and query.xml files provided into the structure seen above.
 
