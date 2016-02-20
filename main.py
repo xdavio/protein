@@ -8,6 +8,7 @@ from os import makedirs
 import xlsxwriter
 from blockaverage import get_diffs
 import json
+from xmlreader import xmlwrapper
 
 class pairDiff(object): 
     def __init__(self):
@@ -111,7 +112,22 @@ class pairDiff(object):
 
         with(open(filejson('pairs'), 'w')) as f:
             f.write(json.dumps(get_diffs(self.datamat)))
-        
+
+def allxml(querypath = 'query.xml'):
+    filepath, numberrange, dayrange, firstcol, lastcol, excel = xmlwrapper(querypath)
+    local_hijack = True
+    foo = pairDiff()
+    foo.getPairDiff(
+        filepath,
+        querypath,
+        numberrange,
+        dayrange,
+        firstcol,
+        lastcol,
+        excel,
+        local_hijack = True
+        )
+    return(foo)
 
 
 def getPairDiff(
