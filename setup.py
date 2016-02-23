@@ -1,10 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='pairdiff',
+    name='pdscript',
     version='0.1',
-    packages=find_packages(),
-    include_package_data=True,
+    py_modules=['pdscript', 'main']
     install_requires=[
         'Click',
         'pandas',
