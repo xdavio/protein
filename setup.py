@@ -14,6 +14,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        pdscript=pairdiff.pdscript:diffmeas
+        pdscript=pdscript:diffmeas
     ''',
 )
