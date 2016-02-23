@@ -77,6 +77,7 @@ class pairDiff(object):
         Writes XLSX files for each step of the data filter process
         """
         directory = os.path.basename(filepath).split(".")[0]
+        self.dirname = str(directory)
         if not os.path.exists(directory):
             makedirs(directory)
 

@@ -2,8 +2,14 @@ from xml.dom import minidom as md
 
 
 #filename = 'querynew.xml'
+
+
 def xmlwrapper(filename):
+    #data = md.parse(filename)
     data = md.parse(filename)
+    #print data.getElementsByTagName('query')
+    #data = data.getElementsByTagName('query')[0]
+    
     try:
         filepath = str(data.getElementsByTagName('filepath')[0].firstChild.nodeValue)
         numberrange = int(data.getElementsByTagName('numberrange')[0].firstChild.nodeValue)
