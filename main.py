@@ -26,8 +26,7 @@ class pairDiff(object):
         dayrange,
         firstcol,
         lastcol,
-        excel,
-        local_hijack
+        excel
         ):
     
         #import data
@@ -37,30 +36,25 @@ class pairDiff(object):
             data = pd.DataFrame.from_csv(filepath)
         elif filetype == "xlsx" or filetype == "xls":
             data = pd.read_excel(filepath, sheetname = excel, index_col = 0) #reads the sheet indexed by "excel" - it's python indexed.
-        if local_hijack:
-            self.data = copy(data)
 
-        #process range issue, i.e. [number] to [number]
-        handle_range(data, numberrange, firstcol, lastcol)
-        if local_hijack:
-            self.datarange = copy(data)
+        self.data = copy(data) #original data
+
+        handle_range(data, numberrange, firstcol, lastcol) #process range issue, i.e. [number] to [number]
+        self.datarange = copy(data) #save the range dataset
 
         #process subset selection from query.xml     take data, give datadrop
         inclusion = createQuery(querypath, data.shape[0], data)
-        datadrop = data.ix[[x[0] for x in enumerate(inclusion) if x[1]]]
-        if local_hijack:
-            self.dataquery = datadrop
+        datadrop = data.ix[[x[0] for x in enumerate(inclusion) if x[1]]] #0 is row, 1 is true if the row should be included
+        self.dataquery = datadrop #save the query inclusion
 
         #process data with multiple days. 0 is average, 1 is first, 2 is second, -1 is keep all rows    #take datadrop, give dataproc
         dataproc = handle_days(datadrop, dayrange, firstcol, lastcol)
         m, n = dataproc.shape
-        if local_hijack:
-            self.datadays = dataproc
+        self.datadays = dataproc
 
         #create difference     take dataproc
         datamat = dataproc.iloc[:,range(firstcol,lastcol + 1)]
-        if local_hijack:
-            self.datamat = datamat
+        self.datamat = datamat
         diff = pairdiff(datamat)
         diffmeas = pd.DataFrame(data = diff,
                                 index = dataproc.columns[firstcol:lastcol+1],
@@ -73,9 +67,8 @@ class pairDiff(object):
         diffmeas['count_nan'] = pd.Series(outnan, index = diffmeas.index)
         diffmeas['sample_size'] = pd.Series(outsamplesize, index = diffmeas.index)
 
-        if local_hijack:
-            self.pairdiff = diffmeas
-            self.debugger(filepath)
+        self.pairdiff = diffmeas
+        self.debugger(filepath)
             
         return(diffmeas)
 
@@ -115,7 +108,6 @@ class pairDiff(object):
 
 def allxml(querypath = 'query.xml'):
     filepath, numberrange, dayrange, firstcol, lastcol, excel = xmlwrapper(querypath)
-    local_hijack = True
     foo = pairDiff()
     foo.getPairDiff(
         filepath,
@@ -124,8 +116,7 @@ def allxml(querypath = 'query.xml'):
         dayrange,
         firstcol,
         lastcol,
-        excel,
-        local_hijack = True
+        excel
         )
     return(foo)
 
@@ -139,30 +130,6 @@ def getPairDiff(
         lastcol = 10,
         excel = 0
         ):
-
-    foo = pairDiff()
-    return(
-        foo.getPairDiff(
-            filepath,
-            querypath,
-            numberrange,
-            dayrange,
-            firstcol,
-            lastcol,
-            excel,
-            local_hijack = False
-            )
-        )
-
-def getPairDiffdebug(
-        filepath = 'DmelClockTimeSeriesSearch-2015-03-26--DataTable3.csv',
-        querypath = 'query.xml',
-        numberrange = 0,
-        dayrange = 0,
-        firstcol = 1,
-        lastcol = 10,
-        excel = 0
-        ):
     foo = pairDiff()
     foo.getPairDiff(
         filepath,
@@ -171,8 +138,7 @@ def getPairDiffdebug(
         dayrange,
         firstcol,
         lastcol,
-        excel,
-        local_hijack = True
+        excel
         )
     return(foo)
 
