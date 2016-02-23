@@ -1,9 +1,10 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
-    name='pdscript',
+    name='pairdiff',
     version='0.1',
-    py_modules=['pdscript'],
+    packages=find_packages(),
+    include_package_data=True,
     install_requires=[
         'Click',
         'pandas',
@@ -13,6 +14,6 @@ setup(
     ],
     entry_points='''
         [console_scripts]
-        pdscript=pdscript:diffmeas
+        pdscript=pairdiff.pdscript:diffmeas
     ''',
 )
