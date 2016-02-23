@@ -7,11 +7,13 @@ clean:
 
 install:
 	mkdir pairdiff
-	mv filter* pairdiff
-	mv blockaverage* pairdiff
-	mv __init__* pairdiff
-	mv main* pairdiff
-	mv process* pairdiff
-	mv ui* pairdiff
-	mv pairdiff.py pairdiff
-	mv pairdiff.pyc pairdiff
+	cp filter* pairdiff
+	cp blockaverage* pairdiff
+	cp __init__* pairdiff
+	cp main* pairdiff
+	cp process* pairdiff
+	cp ui* pairdiff
+	cp xmlreader* pairdiff
+	cp pairdiff.py pairdiff
+	cp pairdiff.pyc pairdiff
+	rm -rf example
