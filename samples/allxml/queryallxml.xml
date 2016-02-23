@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+
+<query>
+  <filepath>DmelClockTimeSeriesSearch-2015-03-26--DataTable_V4.xlsx</filepath>
+  <numberrange>0</numberrange>
+  <dayrange>0</dayrange>
+  <firstcol>2</firstcol>
+  <lastcol>11</lastcol>
+  <excel>0</excel>
+  <!-- Takes type = "include" for row inclusion, "exclude" for row exclusion -->
+  <rowMod type = "exclude">2</rowMod>
+  <papers type = "exclude">17,27</papers>
+  <colFilters>
+    <filter type = "include" col = "measured_material">whole_head</filter>
+  </colFilters>
+</query>
