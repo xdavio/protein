@@ -8,11 +8,10 @@ setup(
         'Click',
         'pandas',
         'numpy',
-        'xlrd',
-        'XlsxWriter'
-    ],
+        'xlrd'
+        ],
     entry_points='''
         [console_scripts]
-        pdscript=pdscript:diffmeas
+        pdscript=pdscript:cli
     ''',
 )
