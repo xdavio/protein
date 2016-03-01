@@ -1,8 +1,6 @@
 from xml.dom import minidom as md
 
-
 #filename = 'querynew.xml'
-
 
 def xmlwrapper(filename):
     #data = md.parse(filename)

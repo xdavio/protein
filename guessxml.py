@@ -1,31 +1,48 @@
-import pandas as pd
+from lxml import etree
 
+class query(object):
+    def __init__(self):
+        self.buildbase()
 
-filepath = '../DmelClockTimeSeriesSearch-2015-03-26--DataTable_V4.xlsx'
-excel = 0
+    def buildbase(self):
+        self.query = etree.Element("query")
+        self.query.append( etree.Element("filepath") )
+        self.query.append( etree.Element("numberrange") )
+        self.query.append( etree.Element("dayrange") )
+        self.query.append( etree.Element("firstcol") )
+        self.query.append( etree.Element("lastcol") )
+        self.query.append( etree.Element("excel") )
+        self.query.append( etree.Element("colFilters") )
+        self.colFilters = self.query.find("colFilters")
+        self.filters = -1 #current index of filters
+        
 
-data = pd.read_excel(filepath, sheetname = excel, index_col = 0)
+    def sn(self, nodename, value):
+        """
+        (S)ets (N)ode 'nodename' to value 'value'
+        """
+        #etree.SubElement(self.query, nodename).text = value
+        self.query.find(nodename).text = value
 
-print "Setting handling of range to method: average."
-numberrange = 0
+    def addchild(self, childname):
+        self.query.append( etree.Element( childname ) )
 
-print "Setting handling of range of days to method: average."
-dayrange = 0
+    def inclusion(self, nodename, val):
+        """
+        val is either 'include' or 'exclude'
+        """
+        if 'include' not in val and 'exclude' not in val:
+            print 'Val must take either the value include or exclude.'
+        self.query.find(nodename).attrib['type'] = val
 
-print "Setting first data column to 2"
-firstcol = 2
+    def addfilter(self, inclusion = 'include', col = 'unknown'):
+        self.filters = self.filters + 1
+        self.colFilters.append( etree.Element('filter', type = inclusion, col = col) )
 
-try:
-    print "Inferring last data column..."
-    lastcol = [y for y,x in enumerate(data.columns.values) if 'Unnamed' in x][0]
-    print "Setting last data column equal to " + lastcol
-except:
-    print "last column of time series data could not be inferred."
-    lastcol = 'unknown'
+    def addfilterfactors(self, factors):
+        self.colFilters[self.filters].text = factors
 
-
-rowMod type = "exclude">2</rowMod>
-papers type = "exclude">17,27</papers>
-colFilters>
-filter type = "include" col = "measured_material">whole_head</filter>
-colFilters>
+    
+    def dump(self):
+        print etree.tostring(self.query, pretty_print = True)
+        
