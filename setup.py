@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name='pdscript',
     version='0.1',
-    py_modules=['pdscript', 'main','blockaverage','filter','pairdiff','process','ui','xmlreader'],
+    py_modules=['pdscript', 'main','blockaverage','filter','pairdiff','process','ui','xmlreader', 'guessxml'],
     install_requires=[
         'Click',
         'pandas',
